@@ -11,8 +11,8 @@
 package com.kynetics.updatefactory.ddiclient.core;
 
 import com.kynetics.updatefactory.ddiclient.api.api.DdiRestApi;
-import com.kynetics.updatefactory.ddiclient.core.model.state.AbstractState;
-import com.kynetics.updatefactory.ddiclient.core.model.state.WaitingState;
+import com.kynetics.updatefactory.ddiclient.core.model.state.AbstractReactiveState;
+import com.kynetics.updatefactory.ddiclient.core.model.state.WaitingReactiveState;
 import com.kynetics.updatefactory.ddiclient.core.servicecallback.SystemOperation;
 import com.kynetics.updatefactory.ddiclient.core.servicecallback.UserInteraction;
 
@@ -26,7 +26,7 @@ public class UFServiceBuilder {
     private String tenant;
     private String controllerId;
     private UFService.TargetData targetData;
-    private AbstractState initialState = new WaitingState(0, null);
+    private AbstractReactiveState initialState = WaitingReactiveState.newInstance(0);
     private long retryDelayOnCommunicationError = 30_000;
     private DdiRestApi client;
     private SystemOperation systemOperation;
@@ -35,7 +35,7 @@ public class UFServiceBuilder {
     UFServiceBuilder() { }
 
 
-    public UFServiceBuilder withInitialState(AbstractState initialState) {
+    public UFServiceBuilder withInitialState(AbstractReactiveState initialState) {
         this.initialState = initialState;
         return this;
     }

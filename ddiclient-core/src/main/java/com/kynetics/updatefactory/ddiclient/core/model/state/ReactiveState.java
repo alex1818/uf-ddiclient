@@ -10,20 +10,14 @@
 
 package com.kynetics.updatefactory.ddiclient.core.model.state;
 
+import com.kynetics.updatefactory.ddiclient.core.model.event.AbstractEvent;
+
 /**
  * @author Daniele Sergio
  */
-public abstract class AbstractStateWithAction extends AbstractState {
-    private static final long serialVersionUID = 7423883109789941001L;
+public interface ReactiveState extends State {
+    ReactiveState onEvent(AbstractEvent event);
 
-    private final long actionId;
-
-    public AbstractStateWithAction(StateName stateName, long actionId) {
-        super(stateName);
-        this.actionId = actionId;
-    }
-
-    public long getActionId() {
-        return actionId;
-    }
+    @Override
+    ReactiveState getPreviousState();
 }

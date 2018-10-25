@@ -14,21 +14,19 @@ import com.kynetics.updatefactory.ddiclient.core.model.event.AbstractEvent;
 import com.kynetics.updatefactory.ddiclient.core.model.event.ErrorEvent;
 import com.kynetics.updatefactory.ddiclient.core.model.event.FailureEvent;
 
-import static com.kynetics.updatefactory.ddiclient.core.model.state.AbstractState.StateName.UPDATE_DOWNLOAD;
+import static com.kynetics.updatefactory.ddiclient.core.model.state.State.StateName.UPDATE_DOWNLOAD;
 
 /**
  * @author Daniele Sergio
  */
-public abstract class AbstractCommunicationState extends AbstractStateWithInnerState {
+public abstract class AbstractCommunicationReactiveState extends AbstractReactiveState {
 
     static final int MAX_ATTEMPTS = 5;
 
-    private static final long serialVersionUID = -4069915532113945570L;
-
     private final int attemptsRemaining;
 
-    public AbstractCommunicationState(StateName stateName, AbstractState state, int attemptsRemaining) {
-        super(stateName, state);
+     AbstractCommunicationReactiveState(State state, int attemptsRemaining) {
+        super(state);
         if (state != null && state.getStateName().equals(UPDATE_DOWNLOAD)) {
             this.attemptsRemaining = attemptsRemaining;
         } else {
@@ -37,16 +35,16 @@ public abstract class AbstractCommunicationState extends AbstractStateWithInnerS
     }
 
     @Override
-    public AbstractState onEvent(AbstractEvent event) {
+    public ReactiveState onEvent(AbstractEvent event) {
         switch (event.getEventName()) {
             case ERROR:
                 final ErrorEvent errorEvent = (ErrorEvent) event;
-                return attemptsRemaining == 0 ? new WaitingState(0, this) : getStateOnError(errorEvent, getState(), attemptsRemaining - 1);
+                return attemptsRemaining == 0 ? WaitingReactiveState.fromPreviousState(this, 0, true) : getStateOnError(errorEvent, getPreviousState(), attemptsRemaining - 1);
             case FAILURE:
                 FailureEvent failureEvent = (FailureEvent) event;
-                return attemptsRemaining == 0 ? new WaitingState(0, this) : new CommunicationFailureState(getState(), attemptsRemaining - 1, failureEvent.getThrowable());
+                return attemptsRemaining == 0 ? WaitingReactiveState.fromPreviousState(this, 0, true) : CommunicationFailureReactiveState.newInstance(getPreviousState(), new StateImpl.ErrorImpl(-1, new String[0], failureEvent.getThrowable()), attemptsRemaining - 1);
             default:
-                return getState().onEvent(event);
+                return getPreviousState().onEvent(event);
         }
     }
 }
