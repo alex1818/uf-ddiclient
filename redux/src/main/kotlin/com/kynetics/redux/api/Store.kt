@@ -9,6 +9,7 @@
 
 package com.kynetics.redux.api
 
+import org.slf4j.LoggerFactory
 import kotlin.properties.Delegates
 
 /**
@@ -21,6 +22,8 @@ interface Store<S: State<*>, A: Action<*>, R>: MiddlewareApi<S, A, R> {
     fun replaceReducer(nextReducer: ReducerType<S, A>)
 
     companion object {
+        private val LOGGER = LoggerFactory.getLogger(Store::class.java)
+
         fun <S: State<*>, A: Action<*>>create(reducerType: ReducerType<S, A>, initialState:S): Store<S,A,A> {
             return object : Store<S, A, A> {
 
@@ -29,15 +32,19 @@ interface Store<S: State<*>, A: Action<*>, R>: MiddlewareApi<S, A, R> {
                 private val subscriptions = ArrayList<(S, S) -> Unit>()
 
                 private var s by Delegates.observable(initialState) { property, oldValue, newValue ->
+                    if(LOGGER.isInfoEnabled){
+                        LOGGER.info("State has changed: [${oldValue}] -> [${newValue}]")
+                    }
                     subscriptions.forEach{
                         ele -> ele.invoke(oldValue, newValue)
                     }
                 }
 
                 override fun dispatch(action: A): A {
-                    println("root dispatch called: disptach(${action})")
+                    if(LOGGER.isInfoEnabled) {
+                        LOGGER.info("Dispatching action: [${action}]")
+                    }
                     s = reducer.invoke(s, action)
-                    println("root dispatch endid: state(${s})")
                     return action
                 }
 

@@ -10,6 +10,9 @@
 package com.kynetics.redux
 
 import com.kynetics.redux.api.*
+import org.slf4j.LoggerFactory
+
+
 
 /**
  * @author Daniele Sergio
@@ -17,14 +20,23 @@ import com.kynetics.redux.api.*
 
 object Utils {
 
+    private val LOGGER = LoggerFactory.getLogger(Utils::class.java)
+
     fun <S: State<*>, A1: Action<*>, A2: Action<*>, R> createStore(reducer: ReducerType<S, A2>, initialState: S, enhancer: EnhancerType<S, A1, A1, A2, R>): Store<S, A2, R> {
         val sc : StoreCreatorType<S, A1, A1> = { r, i ->
             Store.create(r, i)
         }
-        return enhancer.invoke(sc).invoke(reducer, initialState)
+        val store = enhancer.invoke(sc).invoke(reducer, initialState)
+        if(LOGGER.isInfoEnabled) {
+            LOGGER.info("Store created")
+        }
+        return store
     }
 
     fun<S:State<*>, A:Action<*>> applyMiddleware(vararg middlewares: MiddlewareType<S, A, A, A, A>): EnhancerType<S, A, A, A, A> {
+        if(LOGGER.isInfoEnabled) {
+            LOGGER.info("Applying Middlewares")
+        }
         return { storeCreator ->
             { reducer: ReducerType<S, A>, state: S ->
                 val store: Store<S, A, A> = storeCreator.invoke(reducer, state)
@@ -48,6 +60,9 @@ object Utils {
     }
 
     fun <S: State<*>, A: Action<*>> combineReducers(vararg reducers: ReducerType<S, A>): ReducerType<S, A> {
+        if(LOGGER.isInfoEnabled) {
+            LOGGER.info("Combining Reducers")
+        }
         return reducers.reduceRight{ r, ele ->
             { s, a ->
                 ele.invoke(r.invoke(s,a),a)
