@@ -12,4 +12,5 @@ rootProject.name = 'uf-ddiclient'
 include 'ddiclient-api'
 include 'ddiclient-core'
 include 'ddiclient-example'
+include 'redux'
 
