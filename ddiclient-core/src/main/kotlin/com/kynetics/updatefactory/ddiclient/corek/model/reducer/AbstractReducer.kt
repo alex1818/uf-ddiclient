@@ -10,6 +10,7 @@
 package com.kynetics.updatefactory.ddiclient.corek.model.reducer
 
 import com.kynetics.redux.api.Reducer
+import com.kynetics.updatefactory.ddiclient.core.model.state.State
 import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent
 import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent.Name.*
 import com.kynetics.updatefactory.ddiclient.corek.model.UFState
@@ -19,13 +20,24 @@ import org.slf4j.LoggerFactory
  * @author Daniele Sergio
  */
 abstract class AbstractReducer(vararg val stateToReduces: UFState.Name): Reducer<UFState, UFEvent<*>> {
+
+    init{
+        check(stateHandled.intersect(stateToReduces.toList()).isEmpty(),{"Some states have been already handled by other Reducer"})
+        stateHandled.addAll(stateToReduces.toList())
+    }
+
     final override fun reduce(state: UFState, action: UFEvent<*>): UFState {
-        return if(state.name in stateToReduces) state else _reduce(state, action)
+        return when(state.name){
+            ERROR -> state
+            FAILURE -> state
+            else -> if(state.name in stateToReduces) state else _reduce(state, action)
+        }
     }
 
     abstract protected fun _reduce(state: UFState, action: UFEvent<*>): UFState
 
     companion object {
         protected val LOGGER = LoggerFactory.getLogger(AbstractReducer::class.java)
+        private val stateHandled = ArrayList<UFState.Name>()
     }
 }
