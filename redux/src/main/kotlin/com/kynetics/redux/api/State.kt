@@ -12,6 +12,6 @@ package com.kynetics.redux.api
 /**
  * @author Daniele Sergio
  */
-interface State<D>: Named {
+interface State<out D>: Named {
     val data:D
 }

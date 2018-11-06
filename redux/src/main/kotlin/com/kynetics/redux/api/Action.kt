@@ -12,6 +12,6 @@ package com.kynetics.redux.api
 /**
  * @author Daniele Sergio
  */
-interface Action<P>: Named {
+interface Action<out P>: Named {
     val payload: P
 }
