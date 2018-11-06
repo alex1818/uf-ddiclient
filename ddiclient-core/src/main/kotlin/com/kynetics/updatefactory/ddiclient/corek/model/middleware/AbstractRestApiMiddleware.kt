@@ -46,6 +46,6 @@ abstract class AbstractRestApiMiddleware(vararg  val conditionToApplyMiddleware:
         }
     }
 
-    protected abstract fun callRestApi(state:UFState, action:UFEvent<*>):UFEvent<*>
+    protected abstract fun callRestApi(state: UFState, action: UFEvent<*>): UFEvent<*>
 
 }

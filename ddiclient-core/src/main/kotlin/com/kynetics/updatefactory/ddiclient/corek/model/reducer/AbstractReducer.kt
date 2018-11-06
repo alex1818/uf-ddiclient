@@ -10,7 +10,6 @@
 package com.kynetics.updatefactory.ddiclient.corek.model.reducer
 
 import com.kynetics.redux.api.Reducer
-import com.kynetics.updatefactory.ddiclient.core.model.state.State
 import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent
 import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent.Name.*
 import com.kynetics.updatefactory.ddiclient.corek.model.UFState
@@ -28,8 +27,7 @@ abstract class AbstractReducer(vararg val stateToReduces: UFState.Name): Reducer
 
     final override fun reduce(state: UFState, action: UFEvent<*>): UFState {
         return when(state.name){
-            ERROR -> state
-            FAILURE -> state
+            COMMUNICATION_ERROR -> state
             else -> if(state.name in stateToReduces) state else _reduce(state, action)
         }
     }

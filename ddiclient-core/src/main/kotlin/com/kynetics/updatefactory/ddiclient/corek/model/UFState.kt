@@ -18,11 +18,19 @@ import java.util.Comparator
 /**
  * @author Daniele Sergio
  */
-data class UFState(override val name:Name, override val data: Data) : State<UFState.Data> {
+data class UFState(override val name: Name, override val data: Data) : State<UFState.Data> {
 
     enum class Name {
-        WAITING, CONFIG_DATA, UPDATE_INITIALIZATION, UPDATE_DOWNLOAD, SAVING_FILE, UPDATE_READY, UPDATE_STARTED, CANCELLATION_CHECK,
-        CANCELLATION, UPDATE_ENDED, COMMUNICATION_FAILURE, COMMUNICATION_ERROR, AUTHORIZATION_WAITING, SERVER_FILE_CORRUPTED
+        WAITING,
+        UPDATE_INITIALIZATION, //GET UPDATE METADATA
+        WAITING_DOWNLOAD_AUTHORIZATION,
+        SAVING_FILE, //DOWNLOADING/STORING A FILE
+//        UPDATE_READY,  // ALL FILE DOWNLOADED
+        WAITING_UPDATE_AUTHORIZATION,
+        APPLYING_UPDATE, // UPDATE STARTED
+        SENDING_UPDATE_STATUS, // UPDATE ENDED
+        UPDATE_CANCELLED,
+        COMMUNICATION_ERROR
     }
 
     data class Data(val sleepTime: Long,
@@ -37,18 +45,17 @@ data class UFState(override val name:Name, override val data: Data) : State<UFSt
             //communicationErrorState
                     val error: Error,
             //savingFile
-                    val savingFile: SavingFile)
+                    val savingFile: SavingFile,
+            //suspend/authorization
+                    val proxyState: ProxyState
+    )
+
+    data class ProxyState(val name: Name, val actionId:Long)
 
     data class SavingFile(
             val inputStream: InputStream,
             val isInputStreamAvailable: Boolean, //TODO override getinputstream
             val percent: Double
-    )
-
-    data class Error(
-            val code: Long,
-            val details: Array<String>,
-            val throwable: Throwable
     )
 
     data class UpdateResponse(
