@@ -47,7 +47,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
             //savingFile
                     val savingFile: SavingFile,
             //suspend/authorization
-                    val proxyState: ProxyState
+                    val proxyState: ProxyState?
     )
 
     data class ProxyState(val name: Name, val actionId:Long)

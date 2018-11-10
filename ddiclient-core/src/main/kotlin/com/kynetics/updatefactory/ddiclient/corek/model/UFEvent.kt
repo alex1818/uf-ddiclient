@@ -37,7 +37,7 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         FILE_SAVED
     }
 
-    enum class Action{
+    enum class ActionType{
         UPDATE_DEVICE_METADATA,
         CANCEL_UPDATE,
         NEW_UPDATE
@@ -53,7 +53,7 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         val newUpdateErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.UPDATE_ERROR, error)}
         val newCommunicationErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.COMMUNICATION_ERROR, error)}
         val newNoActionEventFound: (Long) -> UFEvent<Long> = {sleepTime -> UFEvent(Name.NO_ACTION_FOUND, sleepTime) }
-        val newActionFoundEventFound: (Map<Action,Long>) -> UFEvent<Map<Action,Long>> = { actions -> UFEvent(Name.ACTION_FOUND, actions) }
+        val NEW_ACTION_TYPE_FOUND_EVENT_FOUND: (Map<ActionType,Long>) -> UFEvent<Map<ActionType,Long>> = { actions -> UFEvent(Name.ACTION_FOUND, actions) }
     }
 
 
