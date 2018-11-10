@@ -53,7 +53,7 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         val newUpdateErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.UPDATE_ERROR, error)}
         val newCommunicationErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.COMMUNICATION_ERROR, error)}
         val newNoActionEventFound: (Long) -> UFEvent<Long> = {sleepTime -> UFEvent(Name.NO_ACTION_FOUND, sleepTime) }
-        val newActionFoundEventFound: (Array<Pair<Action,Long>>) -> UFEvent<Array<Pair<Action,Long>>> = { actions -> UFEvent(Name.ACTION_FOUND, actions) }
+        val newActionFoundEventFound: (Map<Action,Long>) -> UFEvent<Map<Action,Long>> = { actions -> UFEvent(Name.ACTION_FOUND, actions) }
     }
 
 
