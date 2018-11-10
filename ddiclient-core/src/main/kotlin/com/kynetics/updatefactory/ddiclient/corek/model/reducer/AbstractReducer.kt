@@ -26,12 +26,14 @@ abstract class AbstractReducer(vararg val stateToReduces: UFState.Name): Reducer
 
     final override fun reduce(state: UFState, action: UFEvent<*>): UFState {
         return when(state.name){
-            COMMUNICATION_ERROR -> {
-                action as UFEvent<Error>
-                UFState(UFState.Name.COMMUNICATION_ERROR, state.data.copy(error = action.payload))
-            }
-            else -> if(state.name in stateToReduces) state else _reduce(state, action)
+            COMMUNICATION_ERROR -> getNextStateOnCommunicationError(action, state)
+            else                -> if(state.name in stateToReduces) state else _reduce(state, action)
         }
+    }
+
+    private fun getNextStateOnCommunicationError(action: UFEvent<*>, state: UFState): UFState {
+        action as UFEvent<Error>
+        return UFState(UFState.Name.COMMUNICATION_ERROR, state.data.copy(error = action.payload))
     }
 
     abstract protected fun _reduce(state: UFState, action: UFEvent<*>): UFState
