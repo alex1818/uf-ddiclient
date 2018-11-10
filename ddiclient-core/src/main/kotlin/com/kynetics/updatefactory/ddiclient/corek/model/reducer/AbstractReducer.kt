@@ -10,9 +10,8 @@
 package com.kynetics.updatefactory.ddiclient.corek.model.reducer
 
 import com.kynetics.redux.api.Reducer
-import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent
 import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent.Name.*
-import com.kynetics.updatefactory.ddiclient.corek.model.UFState
+import com.kynetics.updatefactory.ddiclient.corek.model.*
 import org.slf4j.LoggerFactory
 
 /**
@@ -21,13 +20,16 @@ import org.slf4j.LoggerFactory
 abstract class AbstractReducer(vararg val stateToReduces: UFState.Name): Reducer<UFState, UFEvent<*>> {
 
     init{
-        check(stateHandled.intersect(stateToReduces.toList()).isEmpty(),{"Some states have been already handled by other Reducer"})
+        check(!stateHandled.intersect(stateToReduces.toList()).isEmpty()) {"Some states have been already handled by other Reducer"}
         stateHandled.addAll(stateToReduces.toList())
     }
 
     final override fun reduce(state: UFState, action: UFEvent<*>): UFState {
         return when(state.name){
-            COMMUNICATION_ERROR -> state
+            COMMUNICATION_ERROR -> {
+                action as UFEvent<Error>
+                UFState(UFState.Name.COMMUNICATION_ERROR, state.data.copy(error = action.payload))
+            }
             else -> if(state.name in stateToReduces) state else _reduce(state, action)
         }
     }
