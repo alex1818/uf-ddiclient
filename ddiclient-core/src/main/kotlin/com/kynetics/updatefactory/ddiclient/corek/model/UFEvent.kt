@@ -10,6 +10,8 @@
 package com.kynetics.updatefactory.ddiclient.corek.model
 
 import com.kynetics.redux.api.Action
+import com.kynetics.updatefactory.ddiclient.corek.model.UFState.Distribution
+
 /**
  * @author Daniele Sergio
  */
@@ -52,9 +54,10 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         val newFileCorruptedlEvent : (Pair<String,String>) -> UFEvent<Pair<String,String>> = {fileNameWithHash -> UFEvent(Name.FILE_CORRUPTED, fileNameWithHash)}
         val newUpdateErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.UPDATE_ERROR, error)}
         val newCommunicationErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.COMMUNICATION_ERROR, error)}
-        val newNoActionEventFound: (Long) -> UFEvent<Long> = {sleepTime -> UFEvent(Name.NO_ACTION_FOUND, sleepTime) }
-        val NEW_ACTION_TYPE_FOUND_EVENT_FOUND: (Map<ActionType,Long>) -> UFEvent<Map<ActionType,Long>> = { actions -> UFEvent(Name.ACTION_FOUND, actions) }
+        val newNoActionFoundEvent: (Long) -> UFEvent<Long> = {sleepTime -> UFEvent(Name.NO_ACTION_FOUND, sleepTime) }
+        val newActionsFoundEvent: (Map<ActionType,Long>) -> UFEvent<Map<ActionType,Long>> = { actions -> UFEvent(Name.ACTION_FOUND, actions) }
+        val newUpdateInitializedEvent: (UpdateMetadata) -> UFEvent<UpdateMetadata> = { updateMetadata -> UFEvent(Name.ACTION_FOUND, updateMetadata) }
     }
 
-
+    data class UpdateMetadata(val distribution: Distribution, val isForced: Boolean)
 }
