@@ -132,9 +132,10 @@ public interface DdiRestApi {
     @Headers("Content-Type: application/json")
     @POST(DdiRestConstants.BASE_V1_REQUEST_MAPPING + "/{controllerId}/" + DdiRestConstants.DEPLOYMENT_BASE_ACTION + "/{actionId}/"
             + DdiRestConstants.FEEDBACK)
-    Call<Void> postBasedeploymentActionFeedback(@Body final DdiActionFeedback feedback,
-                                                          @Path("tenant") final String tenant, @Path("controllerId") final String controllerId,
-                                                          @Path("actionId") final Long actionId);
+    Call<Void> postBasedeploymentActionFeedback(@Path("tenant") final String tenant,
+                                                @Path("controllerId") final String controllerId,
+                                                @Path("actionId") final Long actionId,
+                                                @Body final DdiActionFeedback feedback);
 
     /**
      * This is the feedback channel for the config data action.
@@ -151,8 +152,9 @@ public interface DdiRestApi {
     @Headers("Content-Type: application/json")
     @PUT(value = DdiRestConstants.BASE_V1_REQUEST_MAPPING + "/{controllerId}/"
             + DdiRestConstants.CONFIG_DATA_ACTION)
-    Call<Void> putConfigData(@Body final DdiConfigData configData,
-                                       @Path("tenant") final String tenant, @Path("controllerId") final String controllerId);
+    Call<Void> putConfigData(@Path("tenant") final String tenant,
+                             @Path("controllerId") final String controllerId,
+                             @Body final DdiConfigData configData);
 
     /**
      * RequestMethod.GET method for the {@link DdiCancel} action.
@@ -192,8 +194,8 @@ public interface DdiRestApi {
     @Headers("Content-Type: application/json")
     @POST(DdiRestConstants.BASE_V1_REQUEST_MAPPING + "/{controllerId}/" + DdiRestConstants.CANCEL_ACTION + "/{actionId}/"
             + DdiRestConstants.FEEDBACK)
-    Call<Void> postCancelActionFeedback(@Body final DdiActionFeedback feedback,
-                                                  @Path("tenant") final String tenant,
-                                                  @Path("controllerId") final String controllerId,
-                                                  @Path("actionId") final Long actionId);
+    Call<Void> postCancelActionFeedback(@Path("tenant") final String tenant,
+                                        @Path("controllerId") final String controllerId,
+                                        @Path("actionId") final Long actionId,
+                                        @Body final DdiActionFeedback feedback);
 }

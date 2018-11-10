@@ -219,10 +219,10 @@ public class  UFService {
                         DdiRestConstants.DEFAULT_RESOURCE,
                         DdiRestConstants.NO_ACTION_HISTORY);
                 client.postBasedeploymentActionFeedback(
-                        new FeedbackBuilder(currentState.getActionId(),SCHEDULED,NONE).build(),
                         tenant,
                         controllerId,
-                        currentState.getActionId()).enqueue(new LogCallBack<>());
+                        currentState.getActionId(),
+                        new FeedbackBuilder(currentState.getActionId(),SCHEDULED,NONE).build()).enqueue(new LogCallBack<>());
                 execute(baseDeploymentAction, new ControllerBaseDeploymentAction(), forceDelay);
                 break;
             case UPDATE_DOWNLOAD:
@@ -244,7 +244,7 @@ public class  UFService {
             case CANCELLATION:
                 abortRequest();
                 DdiActionFeedback actionFeedback = new FeedbackBuilder(currentState.getActionId(),CLOSED, SUCESS).build();
-                final Call postCancelActionFeedback = client.postCancelActionFeedback(actionFeedback, tenant,controllerId,currentState.getActionId());
+                final Call postCancelActionFeedback = client.postCancelActionFeedback(tenant,controllerId,currentState.getActionId(),actionFeedback);
                 execute(postCancelActionFeedback, new DefaultDdiCallback(), forceDelay);
                 break;
             case SAVING_FILE:
@@ -292,11 +292,11 @@ public class  UFService {
                         .build();
 
                 final Call lastFeedbackCall = client.postBasedeploymentActionFeedback(
-                        lastFeedback,
                         tenant,
                         controllerId,
-                        currentState.getActionId()
-                );
+                        currentState.getActionId(),
+                        lastFeedback
+                        );
                 execute(lastFeedbackCall,new LastFeedbackCallback(), forceDelay);
                 break;
             case SERVER_FILE_CORRUPTED:
@@ -306,11 +306,11 @@ public class  UFService {
                         .build();
 
                 final Call serverErrorFeedbackCall = client.postBasedeploymentActionFeedback(
-                        serverErrorFeedback,
                         tenant,
                         controllerId,
-                        currentState.getActionId()
-                );
+                        currentState.getActionId(),
+                        serverErrorFeedback
+                        );
 
                 execute(serverErrorFeedbackCall,new DefaultDdiCallback(), forceDelay);
                 break;
@@ -341,7 +341,7 @@ public class  UFService {
                                 null),
                         new ArrayList<>()),
                 targetData.get());
-        return client.putConfigData(configData,tenant, controllerId);
+        return client.putConfigData(tenant, controllerId, configData);
     }
 
     private void handlerState(ReactiveState currentState, AbstractEvent  lastEvent) {
@@ -666,11 +666,11 @@ public class  UFService {
                 List<String> details = new ArrayList<>(1);
                 details.add(message);
                 client.postBasedeploymentActionFeedback(
-                        new FeedbackBuilder(actionId,PROCEEDING,NONE)
-                                .withDetails(details).build(),
                         tenant,
                         controllerId,
-                        actionId)
+                        actionId,
+                        new FeedbackBuilder(actionId,PROCEEDING,NONE)
+                                .withDetails(details).build())
                         .enqueue(new LogCallBack<Void>(){
                             @Override
                             public void onError(Error error) {
