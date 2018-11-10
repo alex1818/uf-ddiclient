@@ -20,13 +20,13 @@ import org.slf4j.LoggerFactory
  * @author Daniele Sergio
  */
 
-abstract class AbstractRestApiMiddleware(vararg  val conditionToApplyMiddleware: Pair<UFState.Name,UFEvent.Name>):Middleware<UFState,UFEvent<*>,UFEvent<*>,UFEvent<*>,UFEvent<*>>{
+abstract class AbstractRestApiMiddleware(private vararg  val conditionToApplyMiddleware: Pair<UFState.Name,UFEvent.Name>):Middleware<UFState,UFEvent<*>,UFEvent<*>,UFEvent<*>,UFEvent<*>>{
 
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(AbstractRestApiMiddleware::class.java)
+        internal val LOGGER = LoggerFactory.getLogger(AbstractRestApiMiddleware::class.java)
     }
 
-    override fun apply(middlewareApi: MiddlewareApi<UFState, UFEvent<*>, UFEvent<*>>): (DispatcherType<UFEvent<*>, UFEvent<*>>) -> DispatcherType<UFEvent<*>, UFEvent<*>> {
+    final override fun apply(middlewareApi: MiddlewareApi<UFState, UFEvent<*>, UFEvent<*>>): (DispatcherType<UFEvent<*>, UFEvent<*>>) -> DispatcherType<UFEvent<*>, UFEvent<*>> {
         return {dispacher ->
             { action ->
                 var actionToSend = action
@@ -34,7 +34,7 @@ abstract class AbstractRestApiMiddleware(vararg  val conditionToApplyMiddleware:
                 val valueToTest = Pair(currentState.name, action.name)
                 if(valueToTest in conditionToApplyMiddleware){
                     if(LOGGER.isDebugEnabled){
-                        LOGGER.debug("Calling rest api with action [${action}")
+                        LOGGER.debug("Calling rest api with action [${action}]")
                     }
                     actionToSend = callRestApi(currentState, action)
                     if(LOGGER.isDebugEnabled && actionToSend != action){
