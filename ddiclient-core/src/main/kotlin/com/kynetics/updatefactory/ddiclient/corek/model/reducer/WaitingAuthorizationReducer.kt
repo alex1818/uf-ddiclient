@@ -18,7 +18,7 @@ import com.kynetics.updatefactory.ddiclient.corek.model.UFState
 class WaitingAuthorizationReducer : AbstractReducer(UFState.Name.WAITING_UPDATE_AUTHORIZATION, UFState.Name.WAITING_DOWNLOAD_AUTHORIZATION) {
     override fun _reduce(state: UFState, action: UFEvent<*>): UFState {
         return when(action.name){
-            UFEvent.Name.AUTHORIZATION_DENIED  -> UFState(UFState.Name.WAITING, state.data.copy(proxyState = UFState.ProxyState(state.name, state.data.actionId)))
+            UFEvent.Name.AUTHORIZATION_DENIED  -> UFState(UFState.Name.WAITING, state.data.copy(proxyState = UFState.ProxyState(state.name, state.data.actionId!!)))
             UFEvent.Name.AUTHORIZATION_GRANTED -> getNextStateOnAuthorizationGranted(state)
             else                               -> state
         }

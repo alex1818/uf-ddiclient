@@ -27,10 +27,10 @@ class ApplyingSoftwareModuleReducer : AbstractReducer(UFState.Name.APPLYING_SOFT
 
     private fun getNextStateOnUpdateSuccess(state: UFState): UFState {
         val distribution = state.data.distribution
-        return if (distribution.hasNextSoftwareModule()){
-            UFState(UFState.Name.SAVING_FILE, state.data.copy(distribution = distribution.nextStep(true)))
+        return if (distribution!!.hasNextSoftwareModule()){
+            UFState(UFState.Name.SAVING_FILE, state.data.copy(distribution = distribution!!.nextStep(true)))
         } else {
-            UFState(UFState.Name.SENDING_UPDATE_STATUS, state.data.copy(updateResponse = UFState.UpdateResponse(!distribution.error, emptyArray())))
+            UFState(UFState.Name.SENDING_UPDATE_STATUS, state.data.copy(updateResponse = UFState.UpdateResponse(!distribution!!.error, emptyArray())))
         }
     }
 }

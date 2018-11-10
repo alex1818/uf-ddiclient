@@ -12,7 +12,6 @@ package com.kynetics.updatefactory.ddiclient.corek.model
 import com.kynetics.redux.api.State
 import com.kynetics.updatefactory.ddiclient.core.model.FileInfo
 import com.kynetics.updatefactory.ddiclient.core.model.Hash
-import java.io.InputStream
 import java.util.Comparator
 
 /**
@@ -20,6 +19,9 @@ import java.util.Comparator
  */
 data class UFState(override val name: Name, override val data: Data) : State<UFState.Data> {
 
+    companion object {
+        fun getNewUFState(sleepTime:Long) = UFState(Name.WAITING, Data(sleepTime))
+    }
     enum class Name {
         WAITING,
         UPDATE_INITIALIZATION, //GET UPDATE METADATA
@@ -34,18 +36,18 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
     }
 
     data class Data(val sleepTime: Long,
-                    val actionId: Long,
-                    val isForced: Boolean,
+                    val actionId: Long? = null,
+                    val isForced: Boolean? = null,
             //updateEnded
-                    val updateResponse: UpdateResponse,
+                    val updateResponse: UpdateResponse? = null,
             //abstractStateWithFile
-                    val distribution: Distribution,
+                    val distribution: Distribution? = null,
             //communicationErrorState
-                    val error: Error,
+                    val error: Error? = null,
             //savingFile
-                    val savingFile: SavingFile,
+                    val savingFile: SavingFile? = null,
             //suspend/authorization
-                    val proxyState: ProxyState?
+                    val proxyState: ProxyState? = null
     )
 
     data class ProxyState(val name: Name, val actionId:Long)

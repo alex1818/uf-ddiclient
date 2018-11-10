@@ -26,7 +26,7 @@ class SavingFileReducer : AbstractReducer(UFState.Name.SAVING_FILE) {
     }
 
     private fun getNextStateOnFileSaved(state: UFState): UFState {
-        return if (state.data.distribution.isSoftwareModuleDownloaded()) {
+        return if (state.data.distribution!!.isSoftwareModuleDownloaded()) {
             getNextStateOnFinshDownload(state)
         } else {
             UFState(UFState.Name.SAVING_FILE, state.data.copy(distribution = state.data.distribution.nextStep(true))) //todo fix nextStep
@@ -35,16 +35,16 @@ class SavingFileReducer : AbstractReducer(UFState.Name.SAVING_FILE) {
 
 
     private fun getNextStateOnFinshDownload(state: UFState):UFState{
-        return if(state.data.isForced) UFState(UFState.Name.APPLYING_SOFTWARE_MODULE, state.data) else
+        return if(state.data.isForced!!) UFState(UFState.Name.APPLYING_SOFTWARE_MODULE, state.data) else
             UFState(UFState.Name.WAITING_UPDATE_AUTHORIZATION, state.data)
     }
 
     private fun getNextStateOnFileCorrupted(state:UFState, hash: Hash):UFState{
         val data = state.data
-        if(data.savingFile.lastHash == hash){
+        if(data.savingFile!!.lastHash == hash){
             return UFState(UFState.Name.SENDING_UPDATE_STATUS, data.copy(updateResponse = UFState.UpdateResponse(false, arrayOf("File corrupted"))))
         }
-        val remainingAttempts = state.data.savingFile.remainingAttempts
+        val remainingAttempts = state.data.savingFile!!.remainingAttempts
         return if (remainingAttempts > 0){
             state.copy(data = data.copy(savingFile = UFState.SavingFile(hash, remainingAttempts - 1)))
         } else state
