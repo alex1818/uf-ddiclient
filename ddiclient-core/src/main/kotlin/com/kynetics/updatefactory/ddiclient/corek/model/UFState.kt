@@ -27,21 +27,19 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
         SAVING_FILE, //DOWNLOADING/STORING A FILE
 //        UPDATE_READY,  // ALL FILE DOWNLOADED
         WAITING_UPDATE_AUTHORIZATION,
-        APPLYING_UPDATE, // UPDATE STARTED
+        APPLYING_SOFTWARE_MODULE, // UPDATE STARTED
         SENDING_UPDATE_STATUS, // UPDATE ENDED
         UPDATE_CANCELLED,
         COMMUNICATION_ERROR
     }
 
     data class Data(val sleepTime: Long,
-                    val stateName: com.kynetics.updatefactory.ddiclient.core.model.state.State.StateName,
                     val actionId: Long,
                     val isForced: Boolean,
             //updateEnded
                     val updateResponse: UpdateResponse,
             //abstractStateWithFile
                     val distribution: Distribution,
-                    val lastHash: Hash,
             //communicationErrorState
                     val error: Error,
             //savingFile
@@ -53,9 +51,11 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
     data class ProxyState(val name: Name, val actionId:Long)
 
     data class SavingFile(
-            val inputStream: InputStream,
+           /* val inputStream: InputStream,
             val isInputStreamAvailable: Boolean, //TODO override getinputstream
-            val percent: Double
+            val percent: Double,*/
+            val lastHash: Hash,
+            val remainingAttempts: Int
     )
 
     data class UpdateResponse(
@@ -75,6 +75,9 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
             return if (hasNextSoftwareModule()) copy(currentSoftwareModuleIndex =  currentSoftwareModuleIndex + 1, error = flag) else this
         }
 
+        fun isSoftwareModuleDownloaded():Boolean{
+            return softwareModules[currentSoftwareModuleIndex].currentFileIsLast()
+        }
 
         fun hasNextSoftwareModule(): Boolean {
             return softwareModules.size == currentSoftwareModuleIndex

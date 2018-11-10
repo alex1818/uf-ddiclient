@@ -10,6 +10,7 @@
 package com.kynetics.updatefactory.ddiclient.corek.model
 
 import com.kynetics.redux.api.Action
+import com.kynetics.updatefactory.ddiclient.core.model.Hash
 import com.kynetics.updatefactory.ddiclient.corek.model.UFState.Distribution
 
 /**
@@ -51,7 +52,7 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         val newUpdateSuccessEvent = UFEvent(Name.UPDATE_SUCCESS, Unit)
         val newUpdateResumeEvent = UFEvent(Name.RESUME, Unit)
         val newForceCancelEvent = UFEvent(Name.FORCE_CANCEL, Unit)
-        val newFileCorruptedlEvent : (Pair<String,String>) -> UFEvent<Pair<String,String>> = {fileNameWithHash -> UFEvent(Name.FILE_CORRUPTED, fileNameWithHash)}
+        val newFileCorruptedlEvent : (Pair<String, Hash>) -> UFEvent<Pair<String,Hash>> = { fileNameWithHash -> UFEvent(Name.FILE_CORRUPTED, fileNameWithHash)}
         val newUpdateErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.UPDATE_ERROR, error)}
         val newCommunicationErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.COMMUNICATION_ERROR, error)}
         val newNoActionFoundEvent: (Long) -> UFEvent<Long> = {sleepTime -> UFEvent(Name.NO_ACTION_FOUND, sleepTime) }
