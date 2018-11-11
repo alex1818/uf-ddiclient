@@ -26,6 +26,8 @@ abstract class AbstractRestApiMiddleware(private vararg  val conditionToApplyMid
         internal val LOGGER = LoggerFactory.getLogger(AbstractRestApiMiddleware::class.java)
     }
 
+    var interruptDispatching = false
+
     final override fun apply(middlewareApi: MiddlewareApi<UFState, UFEvent<*>, UFEvent<*>>): (DispatcherType<UFEvent<*>, UFEvent<*>>) -> DispatcherType<UFEvent<*>, UFEvent<*>> {
         return {dispacher ->
             { action ->
@@ -41,11 +43,22 @@ abstract class AbstractRestApiMiddleware(private vararg  val conditionToApplyMid
                         LOGGER.debug("Action has updated [${action}] -> [${actionToSend}]")
                     }
                 }
-                dispacher.invoke(actionToSend)
+                if(interruptDispatching){
+                    dispacher.invoke(actionToSend)
+                } else {
+                    action
+                }
+
             }
         }
     }
 
+    protected fun interruptDispatching(){
+        if(LOGGER.isDebugEnabled){
+            LOGGER.debug("Dispatching interrupted")
+        }
+        interruptDispatching = true
+    }
     protected abstract fun callRestApi(state: UFState, action: UFEvent<*>): UFEvent<*>
 
 }

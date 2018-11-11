@@ -31,7 +31,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
         WAITING_UPDATE_AUTHORIZATION,
         APPLYING_SOFTWARE_MODULE, // UPDATE STARTED
         SENDING_UPDATE_STATUS, // UPDATE ENDED
-        UPDATE_CANCELLED,
+        CANCELLING_UPDATE,
         COMMUNICATION_ERROR
     }
 
@@ -47,8 +47,8 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
             //savingFile
                     val savingFile: SavingFile? = null,
             //suspend/authorization
-                    val proxyState: ProxyState? = null
-    )
+                    val proxyState: ProxyState? = null,
+                    val updateStarted: Boolean = false)
 
     data class ProxyState(val name: Name, val actionId:Long)
 

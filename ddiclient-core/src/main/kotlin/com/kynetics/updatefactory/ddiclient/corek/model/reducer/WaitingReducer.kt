@@ -27,7 +27,9 @@ class WaitingReducer : AbstractReducer(UFState.Name.WAITING) {
 
     private fun getNextStateOnActionsFound(action: UFEvent<*>, state: UFState): UFState {
         action as UFEvent<Map<UFEvent.ActionType, Long>>
-        return if (action.payload.containsKey(UFEvent.ActionType.NEW_UPDATE)) {
+        val actionMap = action.payload
+        return if (actionMap.containsKey(UFEvent.ActionType.NEW_UPDATE) &&
+                actionMap[UFEvent.ActionType.NEW_UPDATE] != state.data.proxyState!!.actionId) { //todo update action in middleware to go to UPDATE_INITIALIZATION
             UFState(UFState.Name.UPDATE_INITIALIZATION, state.data.copy(actionId = action.payload[UFEvent.ActionType.NEW_UPDATE]!!))
         } else {
             state

@@ -37,7 +37,8 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         AUTHORIZATION_DENIED,
         RESUME,
         FORCE_CANCEL,
-        FILE_SAVED
+        FILE_SAVED,
+        UPDATE_CANCELLED
     }
 
     enum class ActionType{
@@ -51,6 +52,7 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         val newAuthorizationDeniedEvent = UFEvent(Name.AUTHORIZATION_DENIED, Unit)
         val newUpdateSuccessEvent = UFEvent(Name.UPDATE_SUCCESS, Unit)
         val newUpdateResumeEvent = UFEvent(Name.RESUME, Unit)
+        val newUpdateCancelledEvent = UFEvent(Name.UPDATE_CANCELLED, Unit)
         val newForceCancelEvent = UFEvent(Name.FORCE_CANCEL, Unit)
         val newFileCorruptedlEvent : (Pair<String, Hash>) -> UFEvent<Pair<String,Hash>> = { fileNameWithHash -> UFEvent(Name.FILE_CORRUPTED, fileNameWithHash)}
         val newUpdateErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.UPDATE_ERROR, error)}
