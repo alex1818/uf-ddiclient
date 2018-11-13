@@ -7,7 +7,7 @@
  *   http://www.eclipse.org/legal/epl-v10.htm
  */
 
-package com.kynetics.updatefactory.ddiclient.corek.model.middleware
+package com.kynetics.updatefactory.ddiclient.corek
 
 import com.kynetics.updatefactory.ddiclient.api.api.DdiRestApi
 import com.kynetics.updatefactory.ddiclient.api.model.request.DdiActionFeedback

@@ -13,6 +13,7 @@ import com.kynetics.updatefactory.ddiclient.api.model.request.DdiActionFeedback
 import com.kynetics.updatefactory.ddiclient.api.model.request.DdiResult
 import com.kynetics.updatefactory.ddiclient.api.model.request.DdiStatus
 import com.kynetics.updatefactory.ddiclient.core.formatter.CurrentTimeFormatter
+import com.kynetics.updatefactory.ddiclient.corek.Client
 import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent
 import com.kynetics.updatefactory.ddiclient.corek.model.UFState
 import com.kynetics.updatefactory.ddiclient.corek.model.apicallback.LogCallback

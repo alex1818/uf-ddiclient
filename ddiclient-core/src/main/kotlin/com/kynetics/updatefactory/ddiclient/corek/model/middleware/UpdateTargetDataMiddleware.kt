@@ -14,9 +14,10 @@ import com.kynetics.updatefactory.ddiclient.api.model.request.DdiResult
 import com.kynetics.updatefactory.ddiclient.api.model.request.DdiStatus
 import com.kynetics.updatefactory.ddiclient.core.UFService
 import com.kynetics.updatefactory.ddiclient.core.formatter.CurrentTimeFormatter
+import com.kynetics.updatefactory.ddiclient.corek.Client
 import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent
 import com.kynetics.updatefactory.ddiclient.corek.model.UFState
-import com.kynetics.updatefactory.ddiclient.corek.model.apicallback.LogCallBack
+import com.kynetics.updatefactory.ddiclient.corek.model.apicallback.LogCallback
 import java.util.*
 
 /**
@@ -39,7 +40,7 @@ class UpdateTargetDataMiddleware(val client: Client, val targetData: UFService.T
                                     DdiResult.FinalResult.SUCESS, null),
                             ArrayList()),
                     targetData.get())
-            client.putConfigData(configData).enqueue(LogCallBack())
+            client.putConfigData(configData).enqueue(LogCallback())
         }
         return action
     }
