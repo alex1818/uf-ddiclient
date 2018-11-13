@@ -10,6 +10,7 @@
 package com.kynetics.updatefactory.ddiclient.corek
 
 import com.kynetics.updatefactory.ddiclient.api.api.DdiRestApi
+import com.kynetics.updatefactory.ddiclient.api.api.DdiRestConstants
 import com.kynetics.updatefactory.ddiclient.api.model.request.DdiActionFeedback
 import com.kynetics.updatefactory.ddiclient.api.model.request.DdiConfigData
 import com.kynetics.updatefactory.ddiclient.api.model.response.DdiArtifact
@@ -36,7 +37,8 @@ class Client(val api:DdiRestApi, val tenant:String, val controllerId:String){
         return api.downloadArtifact(tenant,controllerId,softwareModuleId, fileName)
     }
 
-    fun getControllerBasedeploymentAction(actionId: Long?, resource: Int, actionHistoryMessageCount: Int?): Call<DdiDeploymentBase> {
+    fun getControllerBasedeploymentAction(actionId: Long?, resource: Int = DdiRestConstants.DEFAULT_RESOURCE,
+                                          actionHistoryMessageCount: Int = DdiRestConstants.NO_ACTION_HISTORY): Call<DdiDeploymentBase> {
         return api.getControllerBasedeploymentAction(tenant,controllerId,actionId, resource, actionHistoryMessageCount)
     }
 

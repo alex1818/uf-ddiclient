@@ -10,7 +10,7 @@
 package com.kynetics.updatefactory.ddiclient.corek.model
 
 data class Error(
-        val code: Long,
+        val code: Int,
         val details: Array<String>,
-        val throwable: Throwable
+        val throwable: Throwable?
 )

@@ -62,5 +62,5 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         val newUpdateInitializedEvent: (UpdateMetadata) -> UFEvent<UpdateMetadata> = { updateMetadata -> UFEvent(Name.ACTION_FOUND, updateMetadata) }
     }
 
-    data class UpdateMetadata(val distribution: Distribution, val isForced: Boolean)
+    data class UpdateMetadata(val distribution: Distribution, val isDownloadForced: Boolean, val isUpdateForced: Boolean)
 }

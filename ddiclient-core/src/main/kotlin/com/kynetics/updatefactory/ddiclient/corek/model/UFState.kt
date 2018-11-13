@@ -96,7 +96,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
         }
     }
 
-    data class SoftwareModule(val type: Type, val id: Long, val files: Array<FileInfo>, val currentFileIndex: Int = 0) {
+    data class SoftwareModule(val type: Type, val files: Array<FileInfo>, val currentFileIndex: Int = 0) {
 
         enum class Type {
             OS, APP
