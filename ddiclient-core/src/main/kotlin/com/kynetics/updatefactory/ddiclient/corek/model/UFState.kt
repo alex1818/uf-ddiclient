@@ -37,7 +37,8 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
 
     data class Data(val sleepTime: Long,
                     val actionId: Long? = null,
-                    val isForced: Boolean? = null,
+                    val isDownloadForced: Boolean? = null,
+                    val isUpdateForced: Boolean? = null,
             //updateEnded
                     val updateResponse: UpdateResponse? = null,
             //abstractStateWithFile
@@ -77,6 +78,10 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
             return if (hasNextSoftwareModule()) copy(currentSoftwareModuleIndex =  currentSoftwareModuleIndex + 1, error = flag) else this
         }
 
+        fun getCurrentSoftwareModule():SoftwareModule{
+            return softwareModules[currentSoftwareModuleIndex]
+        }
+
         fun isSoftwareModuleDownloaded():Boolean{
             return softwareModules[currentSoftwareModuleIndex].currentFileIsLast()
         }
@@ -96,7 +101,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
         }
     }
 
-    data class SoftwareModule(val type: Type, val files: Array<FileInfo>, val currentFileIndex: Int = 0) {
+    data class SoftwareModule(val type: Type, val id: Long, val files: Array<FileInfo>, val currentFileIndex: Int = 0) {
 
         enum class Type {
             OS, APP

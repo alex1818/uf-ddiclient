@@ -54,6 +54,7 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         val newUpdateResumeEvent = UFEvent(Name.RESUME, Unit)
         val newUpdateCancelledEvent = UFEvent(Name.UPDATE_CANCELLED, Unit)
         val newForceCancelEvent = UFEvent(Name.FORCE_CANCEL, Unit)
+        val newFileSavedEvent = UFEvent(Name.FILE_SAVED, Unit)
         val newFileCorruptedlEvent : (Pair<String, Hash>) -> UFEvent<Pair<String,Hash>> = { fileNameWithHash -> UFEvent(Name.FILE_CORRUPTED, fileNameWithHash)}
         val newUpdateErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.UPDATE_ERROR, error)}
         val newCommunicationErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.COMMUNICATION_ERROR, error)}

@@ -26,11 +26,13 @@ class UpdateInitializationReducer() : AbstractReducer(UFState.Name.UPDATE_INITIA
     private fun getNextStateOnUpdateInitialized(action: UFEvent<*>, state: UFState): UFState {
         action as UFEvent<UFEvent.UpdateMetadata>
         val updateMetadata = action.payload
-        val updatedData = state.data.copy(isForced = updateMetadata.isForced, distribution = updateMetadata.distribution)
-        return if (updateMetadata.isForced) {
-            UFState(UFState.Name.WAITING_DOWNLOAD_AUTHORIZATION, updatedData)
-        } else {
+        val updatedData = state.data.copy(isUpdateForced = updateMetadata.isUpdateForced,
+                isDownloadForced =  updateMetadata.isDownloadForced,
+                distribution = updateMetadata.distribution)
+        return if (updateMetadata.isDownloadForced) {
             UFState(UFState.Name.SAVING_FILE, updatedData)
+        } else {
+            UFState(UFState.Name.WAITING_DOWNLOAD_AUTHORIZATION, updatedData)
         }
     }
 }

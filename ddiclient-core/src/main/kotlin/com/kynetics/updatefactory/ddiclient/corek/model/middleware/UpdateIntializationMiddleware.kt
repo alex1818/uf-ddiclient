@@ -45,6 +45,7 @@ class UpdateIntializationMiddleware(val client: Client, val eventPublisher: Even
                                 artifact.size!!))
                     }
                     softwareModuleList.add(UFState.SoftwareModule(if (chunk.part == "bApp") UFState.SoftwareModule.Type.APP else UFState.SoftwareModule.Type.OS,
+                            if(fileInfoList.size > 0 ) fileInfoList[0].linkInfo.softwareModules else -1,
                             fileInfoList.toTypedArray(),
                             0))
                 }

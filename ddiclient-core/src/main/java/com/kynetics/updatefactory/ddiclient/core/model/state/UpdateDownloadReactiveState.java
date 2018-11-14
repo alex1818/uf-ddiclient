@@ -49,7 +49,7 @@ public class UpdateDownloadReactiveState extends AbstractReactiveState {
         switch (event.getEventName()) {
             case DOWNLOAD_STARTED:
                 return SavingFileReactiveState.newInstance(this, getActionId(), isForced(), getDistribution(), getLastHash(), ((DownloadStartedEvent) event).getInputStream());
-            // TODO: 10/25/18 before refactoring return new SavingFileReactiveState(getActionId(), isForced(), getFileInfoList(), getNextFileToDownload(), getLastHash(), ((DownloadStartedEvent) event).getInputStream());
+            // TODO: 10/25/18 before refactoring return new SavingFileReactiveState(getActionId(), isUpdateForced(), getFileInfoList(), getNextFileToDownload(), getLastHash(), ((DownloadStartedEvent) event).getInputStream());
             default:
                 return super.onEvent(event);
         }

@@ -24,7 +24,7 @@ import retrofit2.Call
  * @author Daniele Sergio
  */
 
-class Client(val api:DdiRestApi, val tenant:String, val controllerId:String){
+class Client(private val api:DdiRestApi, private val tenant:String, private val controllerId:String){
     fun getSoftwareModulesArtifacts(softwareModuleId: Long?): Call<MutableList<DdiArtifact>> {
         return api.getSoftwareModulesArtifacts(tenant,controllerId,softwareModuleId)
     }

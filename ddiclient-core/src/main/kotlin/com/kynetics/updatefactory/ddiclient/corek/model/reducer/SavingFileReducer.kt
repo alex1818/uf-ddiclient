@@ -35,7 +35,7 @@ class SavingFileReducer : AbstractReducer(UFState.Name.SAVING_FILE) {
 
 
     private fun getNextStateOnFinshDownload(state: UFState):UFState{
-        return if(state.data.isForced!!) UFState(UFState.Name.APPLYING_SOFTWARE_MODULE, state.data.copy(updateStarted = true)) else
+        return if(state.data.isUpdateForced!!) UFState(UFState.Name.APPLYING_SOFTWARE_MODULE, state.data.copy(updateStarted = true)) else
             UFState(UFState.Name.WAITING_UPDATE_AUTHORIZATION, state.data)
     }
 
