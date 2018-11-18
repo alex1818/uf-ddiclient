@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory
 abstract class AbstractReducer(vararg val stateToReduces: UFState.Name): Reducer<UFState, UFEvent<*>> {
 
     init{
-        check(!stateHandled.intersect(stateToReduces.toList()).isEmpty()) {"Some states have been already handled by other Reducer"}
+        check(stateHandled.intersect(stateToReduces.toList()).isEmpty()) {"[${stateHandled.intersect(stateToReduces.toList())}] states have been already handled by other Reducer"}
         stateHandled.addAll(stateToReduces.toList())
     }
 
@@ -36,7 +36,7 @@ abstract class AbstractReducer(vararg val stateToReduces: UFState.Name): Reducer
         return UFState(UFState.Name.COMMUNICATION_ERROR, state.data.copy(error = action.payload))
     }
 
-    abstract protected fun _reduce(state: UFState, action: UFEvent<*>): UFState
+    protected abstract fun _reduce(state: UFState, action: UFEvent<*>): UFState
 
     companion object {
         protected val LOGGER = LoggerFactory.getLogger(AbstractReducer::class.java)
