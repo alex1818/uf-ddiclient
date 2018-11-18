@@ -22,7 +22,7 @@ import com.kynetics.updatefactory.ddiclient.corek.model.apicallback.LogCallback
  * @author Daniele Sergio
  */
 
-class CancelUpdateMiddleware(val client: Client): AbstractRestApiMiddleware(
+class CancelUpdateMiddleware(val client: Client): AbstractUFMiddleware(
         Pair(UFState.Name.WAITING,UFEvent.Name.ACTION_FOUND),
         Pair(UFState.Name.UPDATE_INITIALIZATION,UFEvent.Name.ACTION_FOUND),
         Pair(UFState.Name.WAITING_DOWNLOAD_AUTHORIZATION,UFEvent.Name.ACTION_FOUND),
@@ -30,7 +30,7 @@ class CancelUpdateMiddleware(val client: Client): AbstractRestApiMiddleware(
         Pair(UFState.Name.WAITING_DOWNLOAD_AUTHORIZATION,UFEvent.Name.ACTION_FOUND),
         Pair(UFState.Name.APPLYING_SOFTWARE_MODULE,UFEvent.Name.ACTION_FOUND)){
 
-    override fun callRestApi(state: UFState, action: UFEvent<*>): UFEvent<*>{
+    override fun execute(state: UFState, action: UFEvent<*>): UFEvent<*>{
         action as UFEvent<Map<UFEvent.ActionType,Long>>
 
         val actionId = action.payload[UFEvent.ActionType.CANCEL_UPDATE] ?: return action

@@ -24,9 +24,9 @@ import java.util.*
  * @author Daniele Sergio
  */
 
-class UpdateTargetDataMiddleware(val client: Client, val targetData: UFService.TargetData): AbstractRestApiMiddleware(Pair(UFState.Name.WAITING,UFEvent.Name.ACTION_FOUND)){
+class UpdateTargetDataMiddleware(val client: Client, val targetData: UFService.TargetData): AbstractUFMiddleware(Pair(UFState.Name.WAITING,UFEvent.Name.ACTION_FOUND)){
 
-    override fun callRestApi(state: UFState, action: UFEvent<*>): UFEvent<*>{
+    override fun execute(state: UFState, action: UFEvent<*>): UFEvent<*>{
         action as UFEvent<Map<UFEvent.ActionType,Long>>
         val actionId = action.payload[UFEvent.ActionType.UPDATE_DEVICE_METADATA]
         if(actionId!=null){

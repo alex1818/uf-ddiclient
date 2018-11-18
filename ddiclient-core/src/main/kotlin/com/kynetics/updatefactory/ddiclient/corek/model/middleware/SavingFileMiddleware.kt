@@ -24,11 +24,11 @@ import okhttp3.ResponseBody
  * @author Daniele Sergio
  */
 
-class SavingFileMiddleware(val client: Client, val eventPublisher: EventPublisher, val systemOperation: SystemOperation): AbstractRestApiMiddleware(
+class SavingFileMiddleware(val client: Client, val eventPublisher: EventPublisher, val systemOperation: SystemOperation): AbstractUFMiddleware(
         Pair(UFState.Name.SAVING_FILE,UFEvent.Name.FILE_SAVED),
         Pair(UFState.Name.WAITING_DOWNLOAD_AUTHORIZATION,UFEvent.Name.AUTHORIZATION_GRANTED),
         Pair(UFState.Name.UPDATE_INITIALIZATION,UFEvent.Name.UPDATE_INITIALIZED)){
-    override fun callRestApi(state: UFState, action: UFEvent<*>): UFEvent<*>{
+    override fun execute(state: UFState, action: UFEvent<*>): UFEvent<*>{
         action as UFEvent<UFEvent.UpdateMetadata>
 
         //todo check null value

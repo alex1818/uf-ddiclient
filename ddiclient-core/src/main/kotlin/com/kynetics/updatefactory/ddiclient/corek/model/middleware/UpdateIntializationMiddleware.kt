@@ -23,10 +23,10 @@ import com.kynetics.updatefactory.ddiclient.corek.model.apicallback.EventPublish
  * @author Daniele Sergio
  */
 
-class UpdateIntializationMiddleware(val client: Client, val eventPublisher: EventPublisher): AbstractRestApiMiddleware(
+class UpdateIntializationMiddleware(val client: Client, val eventPublisher: EventPublisher): AbstractUFMiddleware(
         Pair(UFState.Name.UPDATE_INITIALIZATION,UFEvent.Name.ACTION_FOUND)){
 
-    override fun callRestApi(state: UFState, action: UFEvent<*>): UFEvent<*>{
+    override fun execute(state: UFState, action: UFEvent<*>): UFEvent<*>{
         action as UFEvent<Map<UFEvent.ActionType,Long>>
 
         val actionId = action.payload[UFEvent.ActionType.NEW_UPDATE] ?: return action
