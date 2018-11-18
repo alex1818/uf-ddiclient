@@ -20,7 +20,8 @@ import org.slf4j.LoggerFactory
  * @author Daniele Sergio
  */
 
-abstract class AbstractUFMiddleware(private vararg  val conditionToApplyMiddleware: Pair<UFState.Name,UFEvent.Name>): Middleware<UFState, UFEvent<*>, UFEvent<*>, UFEvent<*>, UFEvent<*>> {
+abstract class AbstractUFMiddleware(
+        private vararg  val conditionToApplyMiddleware: Pair<UFState.Name,UFEvent.Name>): Middleware<UFState, UFEvent<*>, UFEvent<*>, UFEvent<*>, UFEvent<*>> {
 
     companion object {
         internal val LOGGER = LoggerFactory.getLogger(AbstractUFMiddleware::class.java)
@@ -34,7 +35,7 @@ abstract class AbstractUFMiddleware(private vararg  val conditionToApplyMiddlewa
                 var actionToSend = action
                 val currentState = middlewareApi.getState()
                 val valueToTest = Pair(currentState.name, action.name)
-                if(valueToTest in conditionToApplyMiddleware){
+                if(valueToTest in conditionToApplyMiddleware || conditionToApplyMiddleware.isEmpty()){
                     if(LOGGER.isDebugEnabled){
                         LOGGER.debug("Execute middleware with action [$action]")
                     }

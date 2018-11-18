@@ -35,7 +35,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
         COMMUNICATION_ERROR
     }
 
-    data class Data @JvmOverloads constructor(val sleepTime: Long,
+    data class Data @JvmOverloads constructor(val sleepTime: Long = 30_000L,
                     val actionId: Long? = null,
                     val isDownloadForced: Boolean? = null,
                     val isUpdateForced: Boolean? = null,
@@ -51,7 +51,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
                     val proxyState: ProxyState? = null,
                     val updateStarted: Boolean = false)
 
-    data class ProxyState (val name: Name, val actionId:Long)
+    data class ProxyState (val name: Name, val actionId:Long? = null)
 
     data class SavingFile(
            /* val inputStream: InputStream,

@@ -24,7 +24,7 @@ import com.kynetics.updatefactory.ddiclient.corek.model.apicallback.EventPublish
  */
 
 class UpdateIntializationMiddleware(val client: Client, val eventPublisher: EventPublisher): AbstractUFMiddleware(
-        Pair(UFState.Name.UPDATE_INITIALIZATION,UFEvent.Name.ACTION_FOUND)){
+        Pair(UFState.Name.WAITING,UFEvent.Name.ACTION_FOUND)){
 
     override fun execute(state: UFState, action: UFEvent<*>): UFEvent<*>{
         action as UFEvent<Map<UFEvent.ActionType,Long>>

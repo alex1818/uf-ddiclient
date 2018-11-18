@@ -26,6 +26,7 @@ import com.kynetics.updatefactory.ddiclient.corek.model.apicallback.LogCallback
 
 class CancelUpdateMiddleware(val client: Client, val eventPublisher: EventPublisher): AbstractUFMiddleware(
         Pair(UFState.Name.WAITING,UFEvent.Name.ACTION_FOUND),
+        Pair(UFState.Name.COMMUNICATION_ERROR,UFEvent.Name.ACTION_FOUND),
         Pair(UFState.Name.UPDATE_INITIALIZATION,UFEvent.Name.ACTION_FOUND),
         Pair(UFState.Name.WAITING_DOWNLOAD_AUTHORIZATION,UFEvent.Name.ACTION_FOUND),
         Pair(UFState.Name.SAVING_FILE,UFEvent.Name.ACTION_FOUND),
@@ -39,12 +40,12 @@ class CancelUpdateMiddleware(val client: Client, val eventPublisher: EventPublis
 
         val response =   client.getControllerCancelAction(actionId).execute()//todo use enqueue
 
-        if(actionId !in arrayOf(state.data.actionId, state.data.proxyState?.actionId)
+        if(actionId in arrayOf(state.data.actionId, state.data.proxyState?.actionId)
                 && !state.data.updateStarted){
             val status = DdiStatus(DdiStatus.ExecutionStatus.CLOSED, DdiResult(DdiResult.FinalResult.SUCESS, null), emptyList())
             val feedback = DdiActionFeedback(actionId, CurrentTimeFormatter().formatCurrentTime(),status)
             client.postCancelActionFeedback(response.body()?.id?.toLong(),feedback).enqueue(EventPublisherCallback<Void>(eventPublisher))
-        } else {
+        } else {//todo check REJECTED value is correct
             val status = DdiStatus(DdiStatus.ExecutionStatus.REJECTED, DdiResult(DdiResult.FinalResult.SUCESS, null), emptyList())
             val feedback = DdiActionFeedback(actionId, CurrentTimeFormatter().formatCurrentTime(),status)
             client.postCancelActionFeedback(response.body()?.id?.toLong(),feedback).enqueue(LogCallback<Void>())

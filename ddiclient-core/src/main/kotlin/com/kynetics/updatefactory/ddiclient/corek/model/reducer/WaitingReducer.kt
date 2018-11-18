@@ -29,8 +29,12 @@ class WaitingReducer : AbstractReducer(UFState.Name.WAITING) {
         action as UFEvent<Map<UFEvent.ActionType, Long>>
         val actionMap = action.payload
         return if (actionMap.containsKey(UFEvent.ActionType.NEW_UPDATE) &&
-                actionMap[UFEvent.ActionType.NEW_UPDATE] != state.data.proxyState!!.actionId) { //todo update action in middleware to go to UPDATE_INITIALIZATION
+                actionMap[UFEvent.ActionType.NEW_UPDATE] != state.data.proxyState?.actionId) { //todo update action in middleware to go to UPDATE_INITIALIZATION
             UFState(UFState.Name.UPDATE_INITIALIZATION, state.data.copy(actionId = action.payload[UFEvent.ActionType.NEW_UPDATE]!!))
+        } else if (actionMap.containsKey(UFEvent.ActionType.CANCEL_UPDATE) &&
+                (state.data.actionId == actionMap[UFEvent.ActionType.CANCEL_UPDATE] ||
+                        state.data.proxyState?.actionId == actionMap[UFEvent.ActionType.CANCEL_UPDATE])){
+            state
         } else {
             state
         }

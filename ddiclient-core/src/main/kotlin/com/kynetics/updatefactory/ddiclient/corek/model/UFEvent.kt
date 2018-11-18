@@ -19,17 +19,11 @@ import com.kynetics.updatefactory.ddiclient.corek.model.UFState.Distribution
 data class UFEvent<P>(override val name: Name, override val payload: P) : Action<P> {
 
     enum class Name{
-        NO_ACTION_FOUND,//SLEEP_REQUEST,
-        ACTION_FOUND,//UPDATE_CONFIG_REQUEST, NEW_UPDATE, CANCELL_UPDATE //
-//        SUCCESS,
-        //FAILURE,
+        NO_ACTION_FOUND,
+        ACTION_FOUND,
         COMMUNICATION_ERROR,
-//        UPDATE_FOUND,
-//        DOWNLOAD_REQUEST,
-//        DOWNLOAD_STARTED,
         UPDATE_INITIALIZED,
         FILE_CORRUPTED,
-//        CANCEL,
         UPDATE_ERROR,
         UPDATE_SUCCESS,
         UPDATE_STATUS_SEND,
@@ -60,7 +54,7 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         val newCommunicationErrorEvent : (Error) -> UFEvent<Error> = { error -> UFEvent(Name.COMMUNICATION_ERROR, error)}
         val newNoActionFoundEvent: (Long) -> UFEvent<Long> = {sleepTime -> UFEvent(Name.NO_ACTION_FOUND, sleepTime) }
         val newActionsFoundEvent: (Map<ActionType,Long>) -> UFEvent<Map<ActionType,Long>> = { actions -> UFEvent(Name.ACTION_FOUND, actions) }
-        val newUpdateInitializedEvent: (UpdateMetadata) -> UFEvent<UpdateMetadata> = { updateMetadata -> UFEvent(Name.ACTION_FOUND, updateMetadata) }
+        val newUpdateInitializedEvent: (UpdateMetadata) -> UFEvent<UpdateMetadata> = { updateMetadata -> UFEvent(Name.UPDATE_INITIALIZED, updateMetadata) }
     }
 
     data class UpdateMetadata(val distribution: Distribution, val isDownloadForced: Boolean, val isUpdateForced: Boolean)
