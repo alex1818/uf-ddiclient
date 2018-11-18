@@ -12,7 +12,7 @@ package com.kynetics.updatefactory.ddiclient.corek.model
 import com.kynetics.redux.api.State
 import com.kynetics.updatefactory.ddiclient.core.model.FileInfo
 import com.kynetics.updatefactory.ddiclient.core.model.Hash
-import java.util.Comparator
+import java.util.*
 
 /**
  * @author Daniele Sergio
@@ -51,7 +51,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
                     val proxyState: ProxyState? = null,
                     val updateStarted: Boolean = false)
 
-    data class ProxyState @JvmOverloads constructor(val name: Name, val actionId:Long)
+    data class ProxyState (val name: Name, val actionId:Long)
 
     data class SavingFile(
            /* val inputStream: InputStream,
@@ -64,7 +64,25 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
     data class UpdateResponse(
             val isSuccessfullyUpdate: Boolean,
             val details: Array<String>
-    )
+    ) {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as UpdateResponse
+
+            if (isSuccessfullyUpdate != other.isSuccessfullyUpdate) return false
+            if (!Arrays.equals(details, other.details)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = isSuccessfullyUpdate.hashCode()
+            result = 31 * result + Arrays.hashCode(details)
+            return result
+        }
+    }
 
     data class Distribution @JvmOverloads constructor (val softwareModules: Array<SoftwareModule>, val currentSoftwareModuleIndex: Int = 0, val error: Boolean = false) {
 
@@ -88,6 +106,26 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
 
         fun hasNextSoftwareModule(): Boolean {
             return softwareModules.size == currentSoftwareModuleIndex
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as Distribution
+
+            if (!Arrays.equals(softwareModules, other.softwareModules)) return false
+            if (currentSoftwareModuleIndex != other.currentSoftwareModuleIndex) return false
+            if (error != other.error) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = Arrays.hashCode(softwareModules)
+            result = 31 * result + currentSoftwareModuleIndex
+            result = 31 * result + error.hashCode()
+            return result
         }
 
         // TODO: 10/25/18 use comparator when construct object
@@ -118,6 +156,28 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
 
         fun currentFileIsLast(): Boolean {
             return currentFileIndex == files.size
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as SoftwareModule
+
+            if (type != other.type) return false
+            if (id != other.id) return false
+            if (!Arrays.equals(files, other.files)) return false
+            if (currentFileIndex != other.currentFileIndex) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = type.hashCode()
+            result = 31 * result + id.hashCode()
+            result = 31 * result + Arrays.hashCode(files)
+            result = 31 * result + currentFileIndex
+            return result
         }
 
     }
