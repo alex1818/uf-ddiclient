@@ -14,15 +14,17 @@ import com.kynetics.updatefactory.ddiclient.api.model.request.DdiResult
 import com.kynetics.updatefactory.ddiclient.api.model.request.DdiStatus
 import com.kynetics.updatefactory.ddiclient.core.formatter.CurrentTimeFormatter
 import com.kynetics.updatefactory.ddiclient.corek.Client
+import com.kynetics.updatefactory.ddiclient.corek.model.EventPublisher
 import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent
 import com.kynetics.updatefactory.ddiclient.corek.model.UFState
+import com.kynetics.updatefactory.ddiclient.corek.model.apicallback.EventPublisherCallback
 import com.kynetics.updatefactory.ddiclient.corek.model.apicallback.LogCallback
 
 /**
  * @author Daniele Sergio
  */
 
-class CancelUpdateMiddleware(val client: Client): AbstractUFMiddleware(
+class CancelUpdateMiddleware(val client: Client, val eventPublisher: EventPublisher): AbstractUFMiddleware(
         Pair(UFState.Name.WAITING,UFEvent.Name.ACTION_FOUND),
         Pair(UFState.Name.UPDATE_INITIALIZATION,UFEvent.Name.ACTION_FOUND),
         Pair(UFState.Name.WAITING_DOWNLOAD_AUTHORIZATION,UFEvent.Name.ACTION_FOUND),
@@ -41,7 +43,7 @@ class CancelUpdateMiddleware(val client: Client): AbstractUFMiddleware(
                 && !state.data.updateStarted){
             val status = DdiStatus(DdiStatus.ExecutionStatus.CLOSED, DdiResult(DdiResult.FinalResult.SUCESS, null), emptyList())
             val feedback = DdiActionFeedback(actionId, CurrentTimeFormatter().formatCurrentTime(),status)
-            client.postCancelActionFeedback(response.body()?.id?.toLong(),feedback).enqueue(LogCallback<Void>())
+            client.postCancelActionFeedback(response.body()?.id?.toLong(),feedback).enqueue(EventPublisherCallback<Void>(eventPublisher))
         } else {
             val status = DdiStatus(DdiStatus.ExecutionStatus.REJECTED, DdiResult(DdiResult.FinalResult.SUCESS, null), emptyList())
             val feedback = DdiActionFeedback(actionId, CurrentTimeFormatter().formatCurrentTime(),status)
