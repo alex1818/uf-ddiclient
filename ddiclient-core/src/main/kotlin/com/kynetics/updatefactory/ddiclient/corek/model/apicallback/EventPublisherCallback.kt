@@ -11,13 +11,12 @@ package com.kynetics.updatefactory.ddiclient.corek.model.apicallback
 
 import com.kynetics.updatefactory.ddiclient.corek.model.EventPublisher
 import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent
-import com.kynetics.updatefactory.ddiclient.corek.model.Error
 import retrofit2.Call
 
 /**
  * @author Daniele Sergio
  */
-abstract class EventPublisherCallback<T>(protected val eventPublisher: EventPublisher): LogCallback<T>(){
+open class EventPublisherCallback<T>(protected val eventPublisher: EventPublisher): LogCallback<T>(){
     override fun onError(error:  com.kynetics.updatefactory.ddiclient.api.model.response.Error) {
         super.onError(error)
         eventPublisher.publishEvent(UFEvent.newCommunicationErrorEvent(com.kynetics.updatefactory.ddiclient.corek.model.Error(error.code, arrayOf(error.message), null)))
