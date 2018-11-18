@@ -35,7 +35,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
         COMMUNICATION_ERROR
     }
 
-    data class Data(val sleepTime: Long,
+    data class Data @JvmOverloads constructor(val sleepTime: Long,
                     val actionId: Long? = null,
                     val isDownloadForced: Boolean? = null,
                     val isUpdateForced: Boolean? = null,
@@ -51,7 +51,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
                     val proxyState: ProxyState? = null,
                     val updateStarted: Boolean = false)
 
-    data class ProxyState(val name: Name, val actionId:Long)
+    data class ProxyState @JvmOverloads constructor(val name: Name, val actionId:Long)
 
     data class SavingFile(
            /* val inputStream: InputStream,
@@ -66,7 +66,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
             val details: Array<String>
     )
 
-    data class Distribution(val softwareModules: Array<SoftwareModule>, val currentSoftwareModuleIndex: Int = 0, val error: Boolean = false) {
+    data class Distribution @JvmOverloads constructor (val softwareModules: Array<SoftwareModule>, val currentSoftwareModuleIndex: Int = 0, val error: Boolean = false) {
 
         fun nextStep(currentSoftwareModuleSuccessfullyApplied: Boolean): Distribution {
             val flag = !currentSoftwareModuleSuccessfullyApplied || error
@@ -101,7 +101,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
         }
     }
 
-    data class SoftwareModule(val type: Type, val id: Long, val files: Array<FileInfo>, val currentFileIndex: Int = 0) {
+    data class SoftwareModule @JvmOverloads constructor (val type: Type, val id: Long, val files: Array<FileInfo>, val currentFileIndex: Int = 0) {
 
         enum class Type {
             OS, APP
