@@ -32,8 +32,8 @@ interface Store<S: State<*>, A: Action<*>, R>: MiddlewareApi<S, A, R> {
                 private val subscriptions = ArrayList<(S, S) -> Unit>()
 
                 private var s by Delegates.observable(initialState) { property, oldValue, newValue ->
-                    if(LOGGER.isInfoEnabled){
-                        LOGGER.info("State has changed: [${oldValue}] -> [${newValue}]")
+                    if(LOGGER.isInfoEnabled && oldValue != newValue){
+                        LOGGER.info("State has changed: [$oldValue] -> [$newValue]")
                     }
                     subscriptions.forEach{
                         ele -> ele.invoke(oldValue, newValue)
