@@ -31,7 +31,7 @@ class SavingFileMiddleware(val client: Client, val eventPublisher: EventPublishe
     override fun execute(state: UFState, action: UFEvent<*>): UFEvent<*>{
         action as UFEvent<UFEvent.UpdateMetadata>
 
-        //todo check null value
+        //todo check all file is downloaded!!
         val currentSoftwareModule = if (state.name == UFState.Name.SAVING_FILE) state.data.distribution!!.nextStep(true).getCurrentSoftwareModule() else action.payload.distribution.getCurrentSoftwareModule()
         val currentFileInfo = currentSoftwareModule.getCurrentFileInfo()
         client.downloadArtifact(currentSoftwareModule.id, currentFileInfo.linkInfo.fileName)

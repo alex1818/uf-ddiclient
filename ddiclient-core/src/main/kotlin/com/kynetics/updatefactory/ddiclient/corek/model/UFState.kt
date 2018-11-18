@@ -151,7 +151,7 @@ data class UFState(override val name: Name, override val data: Data) : State<UFS
 
 
         fun nextStep(): SoftwareModule {
-            return if (currentFileIsLast()) this else copy(currentFileIndex = currentFileIndex - 1)
+            return if (currentFileIsLast()) this else copy(currentFileIndex = currentFileIndex + 1)
         }
 
         fun currentFileIsLast(): Boolean {

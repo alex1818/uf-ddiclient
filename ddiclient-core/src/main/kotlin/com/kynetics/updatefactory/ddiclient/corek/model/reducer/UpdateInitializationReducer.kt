@@ -15,7 +15,7 @@ import com.kynetics.updatefactory.ddiclient.corek.model.UFState
 /**
  * @author Daniele Sergio
  */
-class UpdateInitializationReducer() : AbstractReducer(UFState.Name.UPDATE_INITIALIZATION) {
+class UpdateInitializationReducer : AbstractReducer(UFState.Name.UPDATE_INITIALIZATION) {
     override fun _reduce(state: UFState, action: UFEvent<*>): UFState {
         return when (action.name) {
             UFEvent.Name.UPDATE_INITIALIZED -> getNextStateOnUpdateInitialized(action, state)
