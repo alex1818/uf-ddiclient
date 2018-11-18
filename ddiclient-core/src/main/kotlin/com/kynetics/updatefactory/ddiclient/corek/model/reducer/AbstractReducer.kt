@@ -25,7 +25,7 @@ abstract class AbstractReducer(vararg val stateToReduces: UFState.Name): Reducer
     }
 
     final override fun reduce(state: UFState, action: UFEvent<*>): UFState {
-        return when(state.name){
+        return when(action.name){
             COMMUNICATION_ERROR -> getNextStateOnCommunicationError(action, state)
             else                -> if(state.name in stateToReduces) state else _reduce(state, action)
         }

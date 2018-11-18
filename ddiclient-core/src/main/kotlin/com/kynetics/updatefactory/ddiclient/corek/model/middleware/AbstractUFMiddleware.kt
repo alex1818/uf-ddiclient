@@ -44,9 +44,9 @@ abstract class AbstractUFMiddleware(private vararg  val conditionToApplyMiddlewa
                     }
                 }
                 if(interruptDispatching){
-                    dispatcher.invoke(actionToSend)
-                } else {
                     action
+                } else {
+                    dispatcher.invoke(actionToSend)
                 }
 
             }
