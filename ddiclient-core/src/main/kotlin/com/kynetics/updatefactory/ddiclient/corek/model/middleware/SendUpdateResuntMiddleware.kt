@@ -15,13 +15,15 @@ import com.kynetics.updatefactory.ddiclient.api.model.request.DdiStatus
 import com.kynetics.updatefactory.ddiclient.core.formatter.CurrentTimeFormatter
 import com.kynetics.updatefactory.ddiclient.corek.Client
 import com.kynetics.updatefactory.ddiclient.corek.model.Error
+import com.kynetics.updatefactory.ddiclient.corek.model.EventPublisher
 import com.kynetics.updatefactory.ddiclient.corek.model.UFEvent
 import com.kynetics.updatefactory.ddiclient.corek.model.UFState
+import com.kynetics.updatefactory.ddiclient.corek.model.apicallback.EventPublisherCallback
 
 /**
  * @author Daniele Sergio
  */
-class SendUpdateResuntMiddleware(private val client: Client) : AbstractUFMiddleware(
+class SendUpdateResuntMiddleware(private val client: Client, private val eventPublisher: EventPublisher) : AbstractUFMiddleware(
         Pair(UFState.Name.APPLYING_SOFTWARE_MODULE, UFEvent.Name.UPDATE_ERROR),
         Pair(UFState.Name.APPLYING_SOFTWARE_MODULE, UFEvent.Name.UPDATE_SUCCESS))  {
 
@@ -29,6 +31,12 @@ class SendUpdateResuntMiddleware(private val client: Client) : AbstractUFMiddlew
         val actionId = state.data.actionId
         client.postBasedeploymentActionFeedback(actionId,
                 DdiActionFeedback(actionId, CurrentTimeFormatter().formatCurrentTime(),getUpdateFeedback(action)))
+                .enqueue(object:EventPublisherCallback<Void?>(eventPublisher){
+                    override fun onSuccess(response: Void?)   {
+                        super.onSuccess(response)
+                        eventPublisher.publishEvent(UFEvent.newUpdateStatusSendEvent)
+                    }
+                })
         return action
     }
 

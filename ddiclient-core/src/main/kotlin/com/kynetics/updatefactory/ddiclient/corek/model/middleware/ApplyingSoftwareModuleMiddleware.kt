@@ -35,9 +35,9 @@ class ApplyingSoftwareModuleMiddleware(private val eventPublisher: EventPublishe
             //todo replace with coroutine
             systemOperation.executeUpdate(state.data.actionId!!)
             when (systemOperation.updateStatus()!!) {
-                SystemOperation.UpdateStatus.APPLIED_WITH_ERROR ->
-                    eventPublisher.publishEvent(event = UFEvent.newUpdateSuccessEvent)
                 SystemOperation.UpdateStatus.SUCCESSFULLY_APPLIED ->
+                    eventPublisher.publishEvent(event = UFEvent.newUpdateSuccessEvent)
+                SystemOperation.UpdateStatus.APPLIED_WITH_ERROR ->
                     eventPublisher.publishEvent(event = UFEvent.newUpdateErrorEvent(Error(details = arrayOf("Error"))))
                 SystemOperation.UpdateStatus.NOT_APPLIED -> {
                 }

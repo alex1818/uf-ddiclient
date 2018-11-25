@@ -62,7 +62,7 @@ class UFService(
                 ApplyingSoftwareModuleMiddleware(eventPublisher,systemOperation)::apply,
                 CancelUpdateMiddleware(client, eventPublisher)::apply,
                 SavingFileMiddleware(client, eventPublisher, systemOperation)::apply,
-                SendUpdateResuntMiddleware(client)::apply,
+                SendUpdateResuntMiddleware(client, eventPublisher)::apply,
                 UpdateIntializationMiddleware(client, eventPublisher)::apply,
                 UpdateTargetDataMiddleware(client,targetData)::apply
         )

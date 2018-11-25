@@ -45,6 +45,7 @@ data class UFEvent<P>(override val name: Name, override val payload: P) : Action
         val newAuthorizationGrantedEvent = UFEvent(Name.AUTHORIZATION_GRANTED, Unit)
         val newAuthorizationDeniedEvent = UFEvent(Name.AUTHORIZATION_DENIED, Unit)
         val newUpdateSuccessEvent = UFEvent(Name.UPDATE_SUCCESS, Unit)
+        val newUpdateStatusSendEvent = UFEvent(Name.UPDATE_STATUS_SEND, Unit)
         val newUpdateResumeEvent = UFEvent(Name.RESUME, Unit)
         val newUpdateCancelledEvent = UFEvent(Name.UPDATE_CANCELLED, Unit)
         val newForceCancelEvent = UFEvent(Name.FORCE_CANCEL, Unit)
