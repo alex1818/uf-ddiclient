@@ -29,6 +29,7 @@ public class SystemOperationMock implements SystemOperation {
     @Override
     public boolean savingFile(InputStream inputStream, FileInfo fileInfo) {
         try {
+            UpdateStatus status = UpdateStatus.NOT_APPLIED;
             Files.copy(
                     inputStream,
                     new File(fileInfo.getLinkInfo().getFileName()).toPath(),
