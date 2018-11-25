@@ -33,6 +33,9 @@ class SavingFileMiddleware(val client: Client, val eventPublisher: EventPublishe
 
         //todo check all file is downloaded!!
         val currentSoftwareModule = if (state.name == UFState.Name.SAVING_FILE) state.data.distribution!!.nextStep(true).getCurrentSoftwareModule() else action.payload.distribution.getCurrentSoftwareModule()
+        if(currentSoftwareModule.currentFileIsLast()){
+            return action
+        }
         val currentFileInfo = currentSoftwareModule.getCurrentFileInfo()
         client.downloadArtifact(currentSoftwareModule.id, currentFileInfo.linkInfo.fileName)
                 .enqueue(object : EventPublisherCallback<ResponseBody>(eventPublisher){

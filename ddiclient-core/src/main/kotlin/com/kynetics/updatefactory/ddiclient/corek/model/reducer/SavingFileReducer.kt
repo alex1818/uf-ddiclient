@@ -26,10 +26,11 @@ class SavingFileReducer : AbstractReducer(UFState.Name.SAVING_FILE) {
     }
 
     private fun getNextStateOnFileSaved(state: UFState): UFState {
-        return if (state.data.distribution!!.isSoftwareModuleDownloaded()) {
+        val nextDistribution = state.data.distribution!!.nextStep(true)
+        return if (nextDistribution.isSoftwareModuleDownloaded()) {
             getNextStateOnFinshDownload(state)
         } else {
-            UFState(UFState.Name.SAVING_FILE, state.data.copy(distribution = state.data.distribution.nextStep(true))) //todo fix nextStep
+            UFState(UFState.Name.SAVING_FILE, state.data.copy(distribution = nextDistribution))
         }
     }
 
