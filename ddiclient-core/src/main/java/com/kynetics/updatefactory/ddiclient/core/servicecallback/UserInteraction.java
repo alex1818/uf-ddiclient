@@ -25,47 +25,4 @@ public interface UserInteraction {
         DOWNLOAD, UPDATE
     }
 
-    class AuthorizationResponse implements Future<Boolean> {
-        private final CountDownLatch latch = new CountDownLatch(1);
-        private Boolean value;
-
-        @Override
-        public boolean cancel(boolean mayInterruptIfRunning) {
-            return false;
-        }
-
-        @Override
-        public boolean isCancelled() {
-            return false;
-        }
-
-        @Override
-        public boolean isDone() {
-            return latch.getCount() == 0;
-        }
-
-        @Override
-        public Boolean get() throws InterruptedException {
-            latch.await();
-            return value;
-        }
-
-        @Override
-        public Boolean get(long timeout, TimeUnit unit) throws InterruptedException, TimeoutException {
-            if (latch.await(timeout, unit)) {
-                return value;
-            } else {
-                throw new TimeoutException();
-            }
-        }
-
-        public void put(Boolean result) {
-            _put(result);
-        }
-
-        private void _put(Boolean result) {
-            value = result;
-            latch.countDown();
-        }
-    }
 }

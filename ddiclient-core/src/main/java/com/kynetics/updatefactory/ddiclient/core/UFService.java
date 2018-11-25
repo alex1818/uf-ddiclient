@@ -254,10 +254,11 @@ public class  UFService {
                 execute(client.getControllerBase(tenant, controllerId), new CheckCancelEventCallback(currentState, new DownloadPendingEvent()),30_000);
                 break;
             case UPDATE_STARTED:
-                if(systemOperation.updateStatus() == SystemOperation.UpdateStatus.NOT_APPLIED){
-                    systemOperation.executeUpdate(currentState.getActionId());
+                try {
+                    setUpdateSuccessfullyUpdate(systemOperation.executeUpdate(currentState.getActionId()).get() == SystemOperation.UpdateStatus.SUCCESSFULLY_APPLIED);
+                } catch (InterruptedException | ExecutionException e) {
+                    setUpdateSuccessfullyUpdate(false);
                 }
-                setUpdateSuccessfullyUpdate(systemOperation.updateStatus() == SystemOperation.UpdateStatus.SUCCESSFULLY_APPLIED);
                 break;
             case AUTHORIZATION_WAITING:
                 final AuthorizationWaitingReactiveState authorizationWaitingState = (AuthorizationWaitingReactiveState) currentState;

@@ -13,6 +13,7 @@ package com.kynetics.updatefactory.ddiclient.core.servicecallback;
 import com.kynetics.updatefactory.ddiclient.core.model.FileInfo;
 
 import java.io.InputStream;
+import java.util.concurrent.Future;
 
 /**
  * @author Daniele Sergio
@@ -20,11 +21,9 @@ import java.io.InputStream;
 public interface SystemOperation {
     boolean savingFile(InputStream inputStream, FileInfo fileInfo);
 
-    void executeUpdate(long actionId);
-
-    UpdateStatus updateStatus();
+    Future<UpdateStatus> executeUpdate(long actionId);
 
     enum UpdateStatus {
-        NOT_APPLIED, APPLIED_WITH_ERROR, SUCCESSFULLY_APPLIED
+        APPLIED_WITH_ERROR, SUCCESSFULLY_APPLIED
     }
 }

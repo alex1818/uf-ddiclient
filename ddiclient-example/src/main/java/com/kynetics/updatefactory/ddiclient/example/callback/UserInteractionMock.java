@@ -10,6 +10,7 @@
 
 package com.kynetics.updatefactory.ddiclient.example.callback;
 
+import com.kynetics.updatefactory.ddiclient.core.servicecallback.CompletableFuture;
 import com.kynetics.updatefactory.ddiclient.core.servicecallback.UserInteraction;
 
 import java.util.Timer;
@@ -23,7 +24,7 @@ public class UserInteractionMock implements UserInteraction {
 
     @Override
     public Future<Boolean> grantAuthorization(Authorization auth) {
-        final AuthorizationResponse response = new AuthorizationResponse();
+        final CompletableFuture response = new CompletableFuture();
         new Timer().schedule(
                 new TimerTask() {
                     @Override

@@ -11,6 +11,7 @@
 package com.kynetics.updatefactory.ddiclient.example.callback;
 
 import com.kynetics.updatefactory.ddiclient.core.model.FileInfo;
+import com.kynetics.updatefactory.ddiclient.core.servicecallback.CompletableFuture;
 import com.kynetics.updatefactory.ddiclient.core.servicecallback.SystemOperation;
 
 import java.io.File;
@@ -18,18 +19,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.concurrent.Future;
 
 /**
  * @author Daniele Sergio
  */
 public class SystemOperationMock implements SystemOperation {
 
-    private UpdateStatus status = UpdateStatus.NOT_APPLIED;
+    private CompletableFuture<UpdateStatus> status = new CompletableFuture<>();
 
     @Override
     public boolean savingFile(InputStream inputStream, FileInfo fileInfo) {
         try {
-            UpdateStatus status = UpdateStatus.NOT_APPLIED;
+            status = new CompletableFuture<>();
             Files.copy(
                     inputStream,
                     new File(fileInfo.getLinkInfo().getFileName()).toPath(),
@@ -42,12 +44,9 @@ public class SystemOperationMock implements SystemOperation {
     }
 
     @Override
-    public void executeUpdate(long actionId) {
-        status = UpdateStatus.SUCCESSFULLY_APPLIED;
-    }
-
-    @Override
-    public UpdateStatus updateStatus() {
+    public CompletableFuture<UpdateStatus> executeUpdate(long actionId) {
+        status.put(UpdateStatus.SUCCESSFULLY_APPLIED);
         return status;
     }
+
 }
